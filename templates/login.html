@@ -34,16 +34,16 @@
       <p class="login-title">로그인</p>
       <div class="ID">
         <p class="ID-title">ID</p>
-        <input class="ID-input" placeholder="이메일 주소 또는 휴대폰 번호" />
+        <input class="ID-input" id ="login-ID-input" placeholder="이메일 주소 또는 휴대폰 번호" />
       </div>
       <div class="PW">
         <p class="PW-title">PASSWORD</p>
-        <input class="PW-input" placeholder="비밀번호" />
+        <input class="PW-input" type = "password" id ="login-PW-input" placeholder="비밀번호" />
       </div>
       <div class="box-button">
         <button
           class="btn btn-primary login-button"
-          onclick="location.href='afterLogin'"
+          onclick="login_2()"
         >
           로그인
         </button>
