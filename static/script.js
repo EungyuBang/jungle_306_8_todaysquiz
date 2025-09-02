@@ -6,7 +6,7 @@ function register() {
   $.ajax({
     type: "POST",
     url: "/register",
-    data: {inputId: inputId, inputPw: inputPw, name_give: inputName},
+    data: {inputId: inputId, inputPw: inputPw, inputName: inputName},
     success: function (response) {
       if (response["result"] == "success") {
         alert("회원가입 성공!");

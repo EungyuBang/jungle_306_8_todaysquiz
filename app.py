@@ -51,13 +51,13 @@ def register():
    input_pw = request.form['inputPw']
    input_name = request.form['inputName']
 
-   find_user = db.todaysquiz.find_one({'ID': input_id})
+   find_user = db.todaysquiz.find_one({'user_id': input_id})
    if find_user is not None:
       return jsonify({'result': 'fail', 'msg': '이미 존재하는 아이디입니다.'})
    
    pw_hash = generate_password_hash(input_pw)
 
-   users = {'ID': input_id, 'PW': pw_hash, 'NAME': input_name}
+   users = {'user_id': input_id, 'user_pw': pw_hash, 'user_name': input_name}
 
    db.users.insert_one(users)
 
