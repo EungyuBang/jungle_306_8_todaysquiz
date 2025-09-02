@@ -1,33 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- 스타일 파일 -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename = 'style.css') }}"
-    />
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Gothic+A1&family=Manufacturing+Consent&family=Nanum+Myeongjo&family=Nanum+Pen+Script&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
-      crossorigin="anonymous"
-    />
-
+    href="https://fonts.googleapis.com/css2?family=Gothic+A1&family=Manufacturing+Consent&family=Nanum+Myeongjo&family=Nanum+Pen+Script&display=swap"
+    rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
+  
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}" /> -->
+    <link rel="stylesheet" href=/static/style.css>
+    <!-- <script src="{{ url_for('static', filename='script.js' )}}"></script> -->
+    <script src=static/script.js text="main.js"></script>
     <title>오늘의 퀴즈</title>
   </head>
 
   <body>
     <div class="main-header">
-      <button onclick="location.href='afterLogin'">오늘의퀴즈</button>
+      <button onclick="location.href='afterlogin'">오늘의퀴즈</button>
       <button>로그아웃</button>
       <button>username</button>
     </div>

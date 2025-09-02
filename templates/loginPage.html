@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,38 +15,37 @@
     <link rel="stylesheet" href=/static/style.css>
     <!-- <script src="{{ url_for('static', filename='script.js' )}}"></script> -->
     <script src=static/script.js text="main.js"></script>
-    <title>오늘의 퀴즈 - 퀴즈풀기</title>
+    <title>오늘의 퀴즈</title>
   </head>
+
   <body>
-    <header>
+    <div class="main-header-login">
+      <p class="page-title-login">오늘의퀴즈</p>
+    </div>
 
-        <h1>오늘의 퀴즈</h1>
-        <ul class="menu">
-            <li><a href="mypage">username</a></li>
-            <li>로그아웃</li>
-        </ul>
-
-    </header>
-
-    <div class="quiz-box">
-      <div class="question-box">
-        <p class="question"><span>O</span>1. 문제</p>
-        <div class="bookmark">O</div>
+    <div class="login-box">
+      <p class="login-title">로그인</p>
+      <div class="id-box">
+        <p class="id-title">아이디</p>
+        <input class="id-input" id ="login-id-input" placeholder="이메일 주소 또는 휴대폰 번호" />
       </div>
-
-      <div class="code-box"></div>
-
-
-      <div class="answer-box">
-        <input
-          class="input-answer"
-          type="text"
-          placeholder="정답을 입력하세요."
-        />
+      <div class="pw-box">
+        <p class="pw-title">비밀번호</p>
+        <input class="pw-input" type = "password" id ="login-pw-input" placeholder="비밀번호" />
       </div>
-
-      <div class="main-btn">
-        <button class="next" onclick="location.href='grading'">제출하기</button>
+      <div class="box-button">
+        <button
+          class="btn btn-primary login-button"
+          onclick="login()"
+        >
+          로그인
+        </button>
+        <button
+          class="btn btn-primary register-button"
+          onclick="location.href='signup'"
+        >
+          회원가입
+        </button>
       </div>
     </div>
   </body>

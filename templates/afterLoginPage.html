@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,39 +15,30 @@
     <link rel="stylesheet" href=/static/style.css>
     <!-- <script src="{{ url_for('static', filename='script.js' )}}"></script> -->
     <script src=static/script.js text="main.js"></script>
-    <title>오늘의 퀴즈 - 퀴즈풀기</title>
+    <title>오늘의 퀴즈</title>
   </head>
+
   <body>
-    <header>
+    <div class="main-header">
+      <p class="page-title" onclick="location.href='afterlogin'">오늘의 퀴즈</p>
+      <button class="btn login-button" onclick="">로그아웃</button>
+      <button onclick="location.href='mypage'">{username}</button>
+    </div>
 
-        <h1>오늘의 퀴즈</h1>
-        <ul class="menu">
-            <li><a href="mypage">username</a></li>
-            <li>로그아웃</li>
-        </ul>
+    <div class="middle-text">
+      <p class="middle-text1">매일 3문제로</p>
+      <p class="middle-text2">
+        심심할 땐 한 문제, 오늘의 퀴즈로 머리를 윔업해보세요
+      </p>
+    </div>
 
-    </header>
-
-    <div class="quiz-box">
-      <div class="question-box">
-        <p class="question"><span>O</span>1. 문제</p>
-        <div class="bookmark">O</div>
-      </div>
-
-      <div class="code-box"></div>
-
-
-      <div class="answer-box">
-        <input
-          class="input-answer"
-          type="text"
-          placeholder="정답을 입력하세요."
-        />
-      </div>
-
-      <div class="main-btn">
-        <button class="next" onclick="location.href='grading'">제출하기</button>
-      </div>
+    <div class="start">
+      <button
+        class="btn btn-primary start-button"
+        onclick="location.href='quizpage'"
+      >
+        풀러가기
+      </button>
     </div>
   </body>
 </html>

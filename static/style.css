@@ -81,7 +81,7 @@
   color: #a57a62;
 }
 
-.ID {
+.id-box {
   padding: 5px;
   margin: 0 auto;
   width: 300px;
@@ -90,11 +90,11 @@
   border-radius: 10px;
 }
 
-.ID-input {
+.id-input {
   width: 98%;
 }
 
-.PW {
+.pw-box {
   padding: 5px;
   margin: 0 auto;
   width: 300px;
@@ -105,7 +105,7 @@
   border-radius: 10px;
 }
 
-.NAME {
+.name-box {
   padding: 5px;
   margin: 0 auto;
   width: 300px;
@@ -116,7 +116,7 @@
   border-radius: 10px;
 }
 
-.PW-input {
+.pw-input {
   width: 98%;
 }
 

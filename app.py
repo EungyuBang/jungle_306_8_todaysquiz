@@ -21,23 +21,23 @@ db = client.todaysquiz
 def home():
    return render_template('index.html')
 
-@app.route('/login')
-def login():
-   return render_template('login.html')
+@app.route('/loginpage')
+def login_page():
+   return render_template('loginPage.html')
 
 @app.route('/mypage')
-def mypage():
-   return render_template('mypage.html')
+def my_page():
+   return render_template('myPage.html')
 
-@app.route('/signUp')
-def signUp():
-   return render_template('signUp.html')
+@app.route('/signup')
+def signup_page():
+   return render_template('registerPage.html')
 
-@app.route('/afterLogin')
+@app.route('/afterlogin')
 def afterLogin():
-   return render_template('afterLogin.html')
+   return render_template('afterLoginPage.html')
 
-@app.route('/quizPage')
+@app.route('/quizpage')
 def quiz_page():
    return render_template('quizPage.html')
 
@@ -45,45 +45,42 @@ def quiz_page():
 def grading_page():
     return render_template('gradingPage.html')
 
-@app.route('/signup_2', methods=['POST'])
-def signup_2():
-   
-   ID_receive = request.form['ID_give']
-   PW_receive = request.form['PW_give']
-   NAME_receive = request.form['NAME_give']
+@app.route('/register', methods=['POST'])
+def register():
+   input_id = request.form['inputId']
+   input_pw = request.form['inputPw']
+   input_name = request.form['inputName']
 
-   find_user = db.todaysquiz.find_one({'ID': ID_receive})
+   find_user = db.todaysquiz.find_one({'ID': input_id})
    if find_user is not None:
       return jsonify({'result': 'fail', 'msg': '이미 존재하는 아이디입니다.'})
    
-   pw_hash = generate_password_hash(PW_receive)
+   pw_hash = generate_password_hash(input_pw)
 
-   users = {'ID': ID_receive, 'PW': pw_hash, 'NAME': NAME_receive}
+   users = {'ID': input_id, 'PW': pw_hash, 'NAME': input_name}
 
-   # 3. mongoDB에 데이터를 넣기
-   db.todaysquiz.insert_one(users)
+   db.users.insert_one(users)
 
    return jsonify({'result': 'success'})
 
-@app.route('/login_2', methods=['POST'])
-def login_2():
-   
-   ID_receive = request.form['ID_give']
-   PW_receive = request.form['PW_give']
+@app.route('/login', methods=['POST'])
+def login(): 
+   input_id = request.form['userId']
+   input_pw = request.form['userPw']
 
-   find_user = db.todaysquiz.find_one({'ID' : ID_receive})
+   find_user = db.todaysquiz.find_one({'user_id' : input_id})
 
    if not find_user:
       return jsonify({'result': 'fail', 'msg': "존재하지 않는 아이디입니다."})
 
-   if not check_password_hash(find_user['PW'], PW_receive):
+   if not check_password_hash(find_user['PW'], input_pw):
       return jsonify({'result' : 'fail', 'msg' : "비밀번호가 틀립니다."})
    else:
-      NAME_receive = find_user['NAME']
-      access_token = create_access_token( identity=NAME_receive, expires_delta=timedelta(minutes=30))
+      input_name = find_user['NAME']
+      access_token = create_access_token(identity=input_name, expires_delta=timedelta(minutes=30))
       return jsonify({'result': 'success', 'access_token': access_token})
 
 if __name__ == '__main__':
-   app.run('0.0.0.0',port=5000,debug=True)
+   app.run('0.0.0.0',port=5001, debug=True)
 
 
