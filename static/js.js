@@ -97,17 +97,39 @@ function signup_2() {
   let PW = $("#PW-input").val();
   let NAME = $("#NAME-input").val();
 
-  // 2. memo에 POST 방식으로 메모 생성 요청하기
+
   $.ajax({
-    type: "POST", // POST 방식으로 요청하겠다.
-    url: "/signup_2", // /memo라는 url에 요청하겠다.
-    data: { ID_give: ID, PW_give: PW, NAME_give: NAME }, // 데이터를 주는 방법
+    type: "POST",
+    url: "/signup_2",
+    data: { ID_give: ID, PW_give: PW, NAME_give: NAME },
     success: function (response) {
       // 성공하면
       if (response["result"] == "success") {
         alert("회원가입 성공!");
-        // 3. 성공 시 페이지 새로고침하기
         window.location.href = "/";
+      } else {
+        alert(response['msg']);
+      }
+    },
+  });
+}
+
+function login_2() {
+  let ID = $("#login-ID-input").val();
+  let PW = $("#login-PW-input").val();
+
+  $.ajax({
+    type: "POST", // POST 방식으로 요청하겠다.
+    url: "/login_2",
+    data: { ID_give: ID, PW_give: PW }, // 데이터를 주는 방법
+    success: function (response) {
+      // 성공하면
+      if (response["result"] == "success") {
+        localStorage.setItem("token", response["access_token"]);
+
+        alert("로그인 성공!");
+        // 3. 성공 시 페이지 새로고침하기
+        window.location.href = "afterLogin";
       } else {
         alert(response['msg']);
       }
