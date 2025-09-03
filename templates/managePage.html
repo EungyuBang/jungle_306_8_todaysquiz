@@ -1,81 +1,73 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <title>신고된 문제 관리</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = { theme: { extend: { colors: { main: "#A57A62" } } } };
-    </script>
-  </head>
-  <body class="bg-white text-stone-800">
-    <header class="max-w-3xl mx-auto px-4 py-5">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>신고된 문제 관리</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { main: "#A57A62" } } } };
+  </script>
+</head>
+
+<body class="bg-white text-stone-800">
+  <header class="max-w-3xl mx-auto px-4 py-5">
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-extrabold text-main">🚨 신고된 문제 관리</h1>
+      <a href="/" class="text-main/80 hover:underline text-sm">처음으로</a>
+    </div>
+    <p class="px-1 text-stone-500 text-sm mt-1">
+      신고된 문제들을 확인하고 조치할 수 있습니다.
+    </p>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 pb-16 space-y-6">
+    {% for q in quizzes %}
+    <div class="bg-white rounded-2xl shadow p-6 space-y-3 border border-stone-200 hover:shadow-md transition"
+      data-id="{{ q._id }}">
+      <!-- 문제 제목 -->
       <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-extrabold text-main">🚨 신고된 문제 관리</h1>
-        <a href="/" class="text-main/80 hover:underline text-sm">처음으로</a>
+        <h2 class="font-semibold text-lg text-stone-800">
+          {{ loop.index }}. {{ q.quiz_sentence }} - {{ q.category }}
+        </h2>
+        <span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-600 font-medium">신고 {{ q.complaint }}회</span>
       </div>
-      <p class="px-1 text-stone-500 text-sm mt-1">
-        신고된 문제들을 확인하고 조치할 수 있습니다.
-      </p>
-    </header>
 
-    <main class="max-w-3xl mx-auto px-4 pb-16 space-y-6">
-      {% for q in quizzes %}
-      <div
-        class="bg-white rounded-2xl shadow p-6 space-y-3 border border-stone-200 hover:shadow-md transition"
-        data-id="{{ q._id }}"
-      >
-        <!-- 문제 제목 -->
-        <div class="flex items-center justify-between">
-          <h2 class="font-semibold text-lg text-stone-800">
-            {{ loop.index }}. {{ q.quiz_sentence }} - {{ q.category }}
-          </h2>
-          <span
-            class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-600 font-medium"
-            >신고 {{ q.complaint }}회</span
-          >
-        </div>
+      <!-- 코드 영역 -->
+      <pre class="bg-stone-200 rounded-md p-4 overflow-auto text-sm text-stone-800"><code>{{ q.quiz_code }}</code></pre>
 
-        <!-- 코드 영역 -->
-        <pre
-          class="bg-stone-200 rounded-md p-4 overflow-auto text-sm text-stone-800"
-        ><code>{{ q.quiz_code }}</code></pre>
-
-        <!-- 버튼 -->
-        <div class="flex gap-3">
-          <button
-            onclick="restoreQuiz('{{ q._id }}')"
-            class="flex-1 rounded-md bg-white border border-main text-main font-medium px-4 py-2 hover:bg-main/5 transition"
-          >
-            복구하기
-          </button>
-          <button
-            onclick="deleteQuiz('{{ q._id }}')"
-            class="flex-1 rounded-md bg-main text-white font-medium px-4 py-2 hover:brightness-95 transition"
-          >
-            영구 삭제
-          </button>
-        </div>
+      <!-- 버튼 -->
+      <div class="flex gap-3">
+        <button onclick="restoreQuiz('{{ q._id }}')"
+          class="flex-1 rounded-md bg-white border border-main text-main font-medium px-4 py-2 hover:bg-main/5 transition">
+          복구하기
+        </button>
+        <button onclick="deleteQuiz('{{ q._id }}')"
+          class="flex-1 rounded-md bg-main text-white font-medium px-4 py-2 hover:brightness-95 transition">
+          영구 삭제
+        </button>
       </div>
-      {% endfor %}
-    </main>
+    </div>
+    {% endfor %}
+  </main>
 
-    <script>
-      function deleteQuiz(id) {
-        if (!confirm("정말로 이 문제를 영구 삭제하시겠습니까?")) return;
-        $.post(`/quiz/delete/${id}`, {}, function (res) {
-          alert(res.msg);
-          $(`[data-id='${id}']`).remove();
-        });
-      }
+  <script>
+    function deleteQuiz(id) {
+      if (!confirm("정말로 이 문제를 영구 삭제하시겠습니까?")) return;
+      $.post(`/quiz/delete/${id}`, {}, function (res) {
+        alert(res.msg);
+        $(`[data-id='${id}']`).remove();
+      });
+    }
 
-      function restoreQuiz(id) {
-        $.post(`/quiz/restore/${id}`, {}, function (res) {
-          alert(res.msg);
-          $(`[data-id='${id}']`).remove();
-        });
-      }
-    </script>
-  </body>
+    function restoreQuiz(id) {
+      $.post(`/quiz/restore/${id}`, {}, function (res) {
+        alert(res.msg);
+        $(`[data-id='${id}']`).remove();
+      });
+    }
+  </script>
+</body>
+
 </html>

@@ -1,107 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='script.js' )}}"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>오늘의 퀴즈</title>
-  </head>
 
-  <body class="bg-gray-100 font-sans">
-    <div
-      class="flex justify-between items-center py-4 px-6 bg-white shadow-md text-[#a57a62]"
-    >
-      <button
-        class="text-xl font-bold hover:text-gray-700 transition-colors"
-        onclick="location.href='afterlogin'"
-      >
-        오늘의퀴즈
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="{{ url_for('static', filename='script.js' )}}"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>오늘의 퀴즈</title>
+</head>
+
+<body class="bg-gray-100 font-sans">
+  <div class="flex justify-between items-center py-4 px-6 bg-white shadow-md text-[#a57a62]">
+    <button class="text-xl font-bold hover:text-gray-700 transition-colors" onclick="location.href='afterlogin'">
+      오늘의퀴즈
+    </button>
+    <div class="flex items-center space-x-4 text-gray-500 font-semibold text-lg">
+      <button id="logout-button" class="hover:underline transition-colors">
+        로그아웃
       </button>
-      <div
-        class="flex items-center space-x-4 text-gray-500 font-semibold text-lg"
-      >
-        <button id="logout-button" class="hover:underline transition-colors">
-          로그아웃
-        </button>
-        <button id="username-button" class="hover:underline transition-colors">
-          {{username}}
-        </button>
-      </div>
-    </div>
-
-    <div
-      class="container mx-auto mt-8 p-6 bg-white rounded-lg shadow-md text-center"
-    >
-      <p class="text-2xl font-semibold mb-2">{{username}}님 안녕하세요.</p>
-      <div class="flex justify-center space-x-12 text-lg">
-        <p>맞힌개수: <span class="font-bold">0</span></p>
-        <p>순위: <span class="font-bold">0</span></p>
-      </div>
-    </div>
-
-    <div class="container mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-      <p class="text-xl font-semibold mb-4">북마크</p>
-      <div
-        class="border border-gray-300 rounded-lg overflow-hidden accordion-item"
-      >
-        <div
-          class="flex w-full text-left py-3 px-4 bg-gray-100 transition-colors focus:outline-none"
-        >
-          <p class="w-full">1번문제</p>
-          <button
-            id="accordionbutton"
-            class="hover:bg-gray-200 transition-colors focus:outline-none"
-          >
-            🔻
-          </button>
-        </div>
-        <div id="accordioncontent" class="px-4 py-3 bg-white hidden">
-          <p>여기에 숨겨진 내용이 들어갑니다.</p>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      {% if rank == 1 %}
-      <button
-        id="manage-button"
-        class="fixed bottom-8 left-1/2 transform -translate-x-1/2 px-4 py-3 bg-red"
-      >
-        관리자페이지
+      <button id="username-button" class="hover:underline transition-colors">
+        {{username}}
       </button>
-      {% endif %}
     </div>
+  </div>
 
-    <script>
-      document.getElementById("logout-button").addEventListener("click", () => {
-        fetch("/logout", { method: "POST" })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("로그아웃 완료:", data);
-            window.location.href = "/";
-          });
-      });
+  <div class="container mx-auto mt-8 p-6 bg-white rounded-lg shadow-md text-center">
+    <p class="text-2xl font-semibold mb-2"><span class="text-[#a57a62] font-bold">{{username}}</span>님 안녕하세요.</p>
+    <div class="flex justify-center space-x-12 text-lg">
+      <p>맞힌개수: <span class="font-bold">{{ correct_count }} / {{ total_solved }}</span></p>
+      <!-- <p>순위: <span class="font-bold">0</span></p> -->
+    </div>
+  </div>
 
-      document
-        .getElementById("username-button")
-        .addEventListener("click", () => {
-          console.log("마이페이지로 이동합니다.");
-          window.location.href = "mypage";
+  <div class="container mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+    <p class="text-xl font-semibold mb-4">북마크</p>
+
+    {% if bookmarks and bookmarks|length > 0 %}
+    <ul class="space-y-3">
+      {% for b in bookmarks %}
+      <li class="border border-gray-200 rounded-lg overflow-hidden">
+        <button class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100">
+          <span class="font-medium">
+            [{{ b.category|upper }} / {{ b.quiz_grade }}] {{ b.quiz_sentence }}
+          </span>
+          <span>🔻</span>
+        </button>
+        <div class="px-4 py-3 hidden">
+          <pre
+            class="bg-stone-100 rounded-md p-3 text-sm overflow-auto"><code>{{ b.quiz_code }} | 정답: {{ b.quiz_answer[0] }}</code></pre>
+          <div class="mt-2 flex gap-2">
+            <form method="post" action="/toggle_bookmark" onsubmit="return false;">
+              <button class="inline-flex items-center rounded-md border px-3 py-1.5 text-sm text-main"
+                onclick="$.post('/toggle_bookmark',{quiz_id:'{{ b._id }}'},()=>location.reload());">
+                북마크 해제
+              </button>
+            </form>
+          </div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-stone-500">북마크한 문제가 없습니다.</p>
+    {% endif %}
+  </div>
+
+  <div>
+    {% if rank == 1 %}
+    <button id="manage-button" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 px-4 py-3 bg-red">
+      관리자페이지
+    </button>
+    {% endif %}
+  </div>
+
+  <script>
+    document.getElementById("logout-button").addEventListener("click", () => {
+      fetch("/logout", { method: "POST" })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("로그아웃 완료:", data);
+          window.location.href = "/";
         });
+    });
 
-      document.getElementById("manage-button").addEventListener("click", () => {
-        console.log("관리자페이지로 이동합니다.");
-        window.location.href = "managepage";
+    document.getElementById("username-button").addEventListener("click", () => {
+      console.log("마이페이지로 이동합니다.");
+      window.location.href = "mypage";
+    });
+
+    document.getElementById("manage-button")?.addEventListener("click", () => {
+      console.log("관리자페이지로 이동합니다.");
+      window.location.href = "managepage";
+    });
+
+    const arrow = document.querySelectorAll("li > button");
+    // let arrowState = false;
+    arrow.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const panel = btn.parentElement.querySelector("div");
+        panel.classList.toggle("hidden");
+        // if(arrowState == false) {
+        //   arrowState = true;
+        //   arrow.innerText = '🔺';
+        // } else {
+        //   arrowState = false;
+        //   arrow.innerText = '🔻';
+        // }
       });
+    });
+  </script>
+</body>
 
-      const accordionbutton = document.getElementById("accordionbutton");
-      const accordioncontent = document.getElementById("accordioncontent");
-
-      accordionbutton.addEventListener("click", () => {
-        accordioncontent.classList.toggle("hidden");
-      });
-    </script>
-  </body>
 </html>

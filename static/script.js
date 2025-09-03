@@ -82,7 +82,6 @@ function complaint(btn) {
       .map(function () { return $(this).data("id"); })
       .get();
 
-    // ✅ 추가: 현재 폼에서 category/grade 읽어서 함께 보냄
     const form = $("#quiz-form");
     const category = form.data("category");
     const grade = form.data("grade");
@@ -96,7 +95,7 @@ function complaint(btn) {
         if (!data.length) return;
         const q = data[0];
         const blanksInputs = q.blanks.map((b, i) =>
-          `<input name="answer-${q._id}-${i+1}" placeholder="정답을 입력하세요." required
+          `<input name="answer-${q._id}-${i + 1}" placeholder="정답을 입력하세요." required
                   class="w-full bg-transparent outline-none placeholder-stone-400 border-0 border-b-2 border-main/40 focus:border-main py-2" />`
         ).join("");
 
@@ -105,12 +104,13 @@ function complaint(btn) {
             <div class="flex items-center justify-between quiz-card" data-id="${q._id}" data-num="${q.quiz_num}">
               <h2 class="font-semibold">${q.quiz_sentence}</h2>
               <div class="flex items-center gap-2">
-                <button type="button" class="inline-flex items-center gap-1 rounded-md border border-main/50 text-main px-3 py-1.5 text-sm hover:bg-main/5">
-                  북마크
-                </button>
-                <button type="button" class="inline-flex items-center gap-1 rounded-md border border-main/50 text-main px-3 py-1.5 text-sm hover:bg-main/5" onclick="complaint(this)">
-                  신고하기
-                </button>
+              <button type="button" class="inline-flex items-center gap-1 rounded-md border border-main/50 text-main px-3 py-1.5 text-sm hover:bg-main/5" onclick="complaint(this)" >
+              <!-- 신고 -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm0 5a1.25 1.25 0 1 1-1.25 1.25A1.25 1.25 0 0 1 10 5.5Zm1.5 9h-3v-1.5h1.125V9.5H8.5V8h3v5h1v1.5Z"/>
+              </svg>
+              신고하기
+            </button>
               </div>
             </div>
             <pre class="bg-stone-200 rounded-md w-full h-48 p-4 overflow-auto text-sm leading-6 text-stone-800"><code>${q.quiz_code}</code></pre>
@@ -118,7 +118,7 @@ function complaint(btn) {
             <div class="space-y-3">${blanksInputs}</div>
           </section>
         `);
-
+        
         newSection.insertBefore($("form button[type='submit']"));
 
         // 번호 다시 매기기

@@ -1,83 +1,65 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="static/script.js" text="main.js"></script>
-    <title>오늘의 퀴즈</title>
-  </head>
 
-  <body class="flex flex-col items-center justify-center min-h-screen bg-white">
-    <!-- 제목 -->
-    <header class="text-center text-[#a57a62] mb-8">
-      <h1 class="text-4xl font-extrabold">오늘의 퀴즈</h1>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="static/script.js" text="main.js"></script>
+  <title>오늘의 퀴즈</title>
+</head>
 
-    <!-- 로그인 박스 -->
-    <div
-      class="w-[500px] max-w-full p-8 border-2 border-[#a57a62] rounded-xl bg-white shadow-xl text-center"
-    >
-      <h2 class="text-3xl text-[#a57a62] font-semibold mb-6">로그인</h2>
+<body class="flex flex-col items-center justify-center min-h-screen bg-white">
+  <!-- 제목 -->
+  <header class="text-center text-[#a57a62] mb-8">
+    <h1 class="text-4xl font-extrabold">오늘의 퀴즈</h1>
+  </header>
 
-      <!-- ID 입력 -->
-      <div class="relative mb-6">
-        <label
-          for="id-input"
-          class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm"
-        >
-          ID
-        </label>
-        <input
-          id="id-input"
-          type="text"
-          placeholder="아이디"
-          class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400"
-        />
-      </div>
+  <!-- 로그인 박스 -->
+  <div class="w-[500px] max-w-full p-8 border-2 border-[#a57a62] rounded-xl bg-white shadow-xl text-center">
+    <h2 class="text-3xl text-[#a57a62] font-semibold mb-6">로그인</h2>
 
-      <!-- PW 입력 -->
-      <div class="relative mb-8">
-        <label
-          for="pw-input"
-          class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm"
-        >
-          PASSWORD
-        </label>
-        <input
-          id="pw-input"
-          type="password"
-          placeholder="비밀번호"
-          class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400"
-        />
-      </div>
-
-      <!-- 버튼 -->
-      <div class="flex justify-center space-x-4">
-        <button
-          id="login-button"
-          class="bg-[#a57a62] text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:opacity-90 transition"
-          onclick="login()"
-        >
-          로그인
-        </button>
-        <button
-          id="register-button"
-          class="bg-gray-200 text-[#a57a62] font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-gray-300 transition"
-        >
-          회원가입
-        </button>
-      </div>
+    <!-- ID 입력 -->
+    <div class="relative mb-6">
+      <label for="id-input" class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm">
+        ID
+      </label>
+      <input id="id-input" type="text" placeholder="아이디"
+        class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400" />
     </div>
 
-    <script>
-      document
-        .getElementById("register-button")
-        .addEventListener("click", () => {
-          console.log("회원가입 페이지로 이동합니다.");
-          window.location.href = "signup";
-        });
-    </script>
-  </body>
+    <!-- PW 입력 -->
+    <div class="relative mb-8">
+      <label for="pw-input" class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm">
+        PASSWORD
+      </label>
+      <input id="pw-input" type="password" placeholder="비밀번호"
+        class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400" />
+    </div>
+
+    <!-- 버튼 -->
+    <div class="flex justify-center space-x-4">
+      <button id="login-button"
+        class="bg-[#a57a62] text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:opacity-90 transition"
+        onclick="login()">
+        로그인
+      </button>
+      <button id="register-button"
+        class="bg-gray-200 text-[#a57a62] font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-gray-300 transition">
+        회원가입
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document
+      .getElementById("register-button")
+      .addEventListener("click", () => {
+        console.log("회원가입 페이지로 이동합니다.");
+        window.location.href = "signup";
+      });
+  </script>
+</body>
+
 </html>

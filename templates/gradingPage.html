@@ -1,103 +1,89 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <title>채점 결과</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-      tailwind.config = { theme: { extend: { colors: { main: "#a57a62" } } } };
-    </script>
-  </head>
-  <body
-    class="text-stone-800 min-h-screen flex items-center justify-center p-4"
-  >
-    <main
-      class="w-full max-w-3xl bg-white rounded-2xl shadow-card p-8 space-y-6"
-    >
-      <div class="text-center space-y-2">
-        <h1 class="text-3xl font-extrabold text-main">채점 결과</h1>
-        <p class="text-stone-700 text-lg">
-          점수: <span class="font-bold text-xl">{{ score }}</span> / {{ total }}
-        </p>
-      </div>
-      <hr class="border-t-2 border-stone-200" />
-      <div class="space-y-6">
-        {% for r in results %}
-        <section
-          class="bg-stone-50 rounded-lg p-4 shadow-sm border border-stone-200 hover:shadow-md transition-shadow space-y-2"
-        >
-          <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-lg">
-              문제 {{ loop.index }} (퀴즈번호: {{ r.quiz_num }})
-            </h2>
 
-            <div class="flex items-center gap-2">
-              <!-- 북마크 버튼 -->
-              <button
-                type="button"
-                class="bookmark-btn inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-sm font-semibold border transition-colors {% if r._id|string in user.bookmarks %} bg-main text-white {% else %} bg-white text-main {% endif %}"
-                data-quiz="{{ r._id }}"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M5 3a2 2 0 0 0-2 2v12l7-3 7 3V5a2 2 0 0 0-2-2H5z" />
-                </svg>
-                북마크
-              </button>
+<head>
+  <meta charset="UTF-8" />
+  <title>채점 결과</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { main: "#a57a62" } } } };
+  </script>
+</head>
 
-              <!-- 정답/오답 표시 -->
-              <span
-                class="font-bold px-3 py-1 rounded-full text-sm {% if r.correct %} bg-green-100 text-green-700 {% else %} bg-red-100 text-red-700 {% endif %}"
-              >
-                {{ '정답' if r.correct else '오답' }}
-              </span>
-            </div>
+<body class="text-stone-800 min-h-screen flex items-center justify-center p-4">
+  <main class="w-full max-w-3xl bg-white rounded-2xl shadow-card p-8 space-y-6">
+    <div class="text-center space-y-2">
+      <h1 class="text-3xl font-extrabold text-main">채점 결과</h1>
+      <p class="text-stone-700 text-lg">
+        점수: <span class="font-bold text-xl">{{ score }}</span> / {{ total }}
+      </p>
+    </div>
+    <hr class="border-t-2 border-stone-200" />
+    <div class="space-y-6">
+      {% for r in results %}
+      <section
+        class="bg-stone-50 rounded-lg p-4 shadow-sm border border-stone-200 hover:shadow-md transition-shadow space-y-2">
+        <div class="flex items-center justify-between">
+          <h2 class="font-semibold text-lg">
+            문제 {{ loop.index }} (퀴즈번호: {{ r.quiz_num }})
+          </h2>
+
+          <div class="flex items-center gap-2">
+            <!-- 북마크 버튼 -->
+            <button type="button"
+              class="bookmark-btn inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-sm font-semibold border transition-colors {% if r._id|string in user.bookmarks %} bg-main text-white {% else %} bg-white text-main {% endif %}"
+              data-quiz="{{ r._id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M5 3a2 2 0 0 0-2 2v12l7-3 7 3V5a2 2 0 0 0-2-2H5z" />
+              </svg>
+              북마크
+            </button>
+
+            <!-- 정답/오답 표시 -->
+            <span
+              class="font-bold px-3 py-1 rounded-full text-sm {% if r.correct %} bg-green-100 text-green-700 {% else %} bg-red-100 text-red-700 {% endif %}">
+              {{ '정답' if r.correct else '오답' }}
+            </span>
           </div>
+        </div>
 
-          <p class="text-stone-600 mb-2">{{ r.sentence }}</p>
-          <pre
-            class="bg-stone-100 rounded-md p-3 text-sm overflow-auto mb-2 shadow-inner"
-          ><code>{{ r.code }}</code></pre>
-          <p><b>내 답:</b> {{ r.user_inputs | join(', ') }}</p>
-          <hr class="my-2" />
-          <p><b>정답:</b> {{ r.answers[0] }}</p>
-        </section>
+        <p class="text-stone-600 mb-2">{{ r.sentence }}</p>
+        <pre class="bg-stone-100 rounded-md p-3 text-sm overflow-auto mb-2 shadow-inner"><code>{{ r.code }}</code></pre>
+        <p><b>내 답:</b> {{ r.user_inputs | join(', ') }}</p>
+        <hr class="my-2" />
+        <p><b>정답:</b> {{ r.answers[0] }}</p>
+      </section>
 
-        {% endfor %}
-      </div>
-      <div class="text-center mt-6">
-        <a
-          href="/afterlogin"
-          class="inline-block rounded-lg bg-main hover:bg-[#8D6C54] text-white px-6 py-3 font-semibold shadow-md transition-colors"
-        >
-          메인으로 돌아가기
-        </a>
-      </div>
-    </main>
-    <script>
-      $(document).on("click", ".bookmark-btn", function () {
-        console.log("북마크 클릭됨"); // 클릭 확인용
-        const btn = $(this);
-        const quizId = btn.data("quiz");
+      {% endfor %}
+    </div>
+    <div class="text-center mt-6">
+      <a href="/afterlogin"
+        class="inline-block rounded-lg bg-main hover:bg-[#8D6C54] text-white px-6 py-3 font-semibold shadow-md transition-colors">
+        메인으로 돌아가기
+      </a>
+    </div>
+  </main>
+  <script>
+    $(document).on("click", ".bookmark-btn", function () {
+      console.log("북마크 클릭됨"); // 클릭 확인용
+      const btn = $(this);
+      const quizId = btn.data("quiz");
 
-        $.post("/toggle_bookmark", { quiz_id: quizId }, function (res) {
-          console.log("서버 응답:", res);
-          if (res.result === "added") {
-            btn
-              .removeClass("bg-white text-main")
-              .addClass("bg-main text-white");
-          } else if (res.result === "removed") {
-            btn
-              .removeClass("bg-main text-white")
-              .addClass("bg-white text-main");
-          }
-        });
+      $.post("/toggle_bookmark", { quiz_id: quizId }, function (res) {
+        console.log("서버 응답:", res);
+        if (res.result === "added") {
+          btn
+            .removeClass("bg-white text-main")
+            .addClass("bg-main text-white");
+        } else if (res.result === "removed") {
+          btn
+            .removeClass("bg-main text-white")
+            .addClass("bg-white text-main");
+        }
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
+
 </html>

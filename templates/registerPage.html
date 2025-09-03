@@ -1,84 +1,61 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="static/script.js"></script>
-    <title>오늘의 퀴즈 - 회원가입</title>
-  </head>
 
-  <body class="flex flex-col items-center justify-center min-h-screen bg-white">
-    <!-- 제목 -->
-    <header class="text-center text-[#a57a62] mb-8">
-      <h1 class="text-4xl font-extrabold">오늘의 퀴즈</h1>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="static/script.js"></script>
+  <title>오늘의 퀴즈 - 회원가입</title>
+</head>
 
-    <!-- 회원가입 박스 -->
-    <div
-      class="w-[500px] max-w-full p-8 border-2 border-[#a57a62] rounded-xl bg-white shadow-xl text-center"
-    >
-      <h2 class="text-3xl text-[#a57a62] font-semibold mb-6">회원가입</h2>
+<body class="flex flex-col items-center justify-center min-h-screen bg-white">
+  <!-- 제목 -->
+  <header class="text-center text-[#a57a62] mb-8">
+    <h1 class="text-4xl font-extrabold">오늘의 퀴즈</h1>
+  </header>
 
-      <!-- ID 입력 -->
-      <div class="relative mb-6">
-        <label
-          for="id-input"
-          class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm"
-        >
-          ID
-        </label>
-        <input
-          id="id-input"
-          type="text"
-          placeholder="아이디"
-          class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400"
-        />
-      </div>
+  <!-- 회원가입 박스 -->
+  <div class="w-[500px] max-w-full p-8 border-2 border-[#a57a62] rounded-xl bg-white shadow-xl text-center">
+    <h2 class="text-3xl text-[#a57a62] font-semibold mb-6">회원가입</h2>
 
-      <!-- PW 입력 -->
-      <div class="relative mb-6">
-        <label
-          for="pw-input"
-          class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm"
-        >
-          PASSWORD
-        </label>
-        <input
-          id="pw-input"
-          type="password"
-          placeholder="비밀번호"
-          class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400"
-        />
-      </div>
-
-      <!-- 이름 입력 -->
-      <div class="relative mb-8">
-        <label
-          for="name-input"
-          class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm"
-        >
-          NAME
-        </label>
-        <input
-          id="name-input"
-          type="text"
-          placeholder="이름"
-          class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400"
-        />
-      </div>
-
-      <!-- 버튼 -->
-      <div class="flex justify-center">
-        <button
-          id="register-button"
-          class="bg-[#a57a62] text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:opacity-90 transition"
-          onclick="register()"
-        >
-          회원가입
-        </button>
-      </div>
+    <!-- ID 입력 -->
+    <div class="relative mb-6">
+      <label for="id-input" class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm">
+        ID
+      </label>
+      <input id="id-input" type="text" placeholder="아이디"
+        class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400" />
     </div>
-  </body>
+
+    <!-- PW 입력 -->
+    <div class="relative mb-6">
+      <label for="pw-input" class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm">
+        PASSWORD
+      </label>
+      <input id="pw-input" type="password" placeholder="비밀번호"
+        class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400" />
+    </div>
+
+    <!-- 이름 입력 -->
+    <div class="relative mb-8">
+      <label for="name-input" class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm">
+        NAME
+      </label>
+      <input id="name-input" type="text" placeholder="이름"
+        class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400" />
+    </div>
+
+    <!-- 버튼 -->
+    <div class="flex justify-center">
+      <button id="register-button"
+        class="bg-[#a57a62] text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:opacity-90 transition"
+        onclick="register()">
+        회원가입
+      </button>
+    </div>
+  </div>
+</body>
+
 </html>

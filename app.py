@@ -1,11 +1,16 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for, make_response, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from bson import ObjectId
 import jwt
 import re
 from pymongo import MongoClient
+
+KST = timezone(timedelta(hours=9))
+
+def today_kst():
+    return datetime.now(KST).date().isoformat()
 
 app = Flask(__name__)
 SECRET_KEY = "supersecret"
@@ -52,11 +57,32 @@ def my_page():
    token = request.cookies.get('access_token')
    payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
    user_id = payload['sub']
-   user_name = payload['name']
-   user_rank = payload['rank']
-   # user_id로 사용자 정보 조회
-   user = db.users.find_one({"user_id": user_id})
-   return render_template('mypage.html', username=user_name , user = user, rank = user_rank)
+   user = db.users.find_one({"user_id": user_id}) or {}
+
+   # 북마크 ID들(str) → ObjectId로 변환
+   bm_ids = [ObjectId(qid) for qid in user.get("bookmarks", []) if qid]
+   # 해당 문제들 가져오기
+   bookmarks = []
+   if bm_ids:
+      for q in db.quiz.find({"_id": {"$in": bm_ids}}, {"quiz_sentence":1,"category":1, "quiz_code":1, "answer": 1, "quiz_grade": 1}):
+         bookmarks.append({
+            "_id": str(q["_id"]),
+            "quiz_sentence": q.get("quiz_sentence","(제목 없음)"),
+            "category": q.get("category"),
+            "quiz_grade": q.get("quiz_grade"),
+            "quiz_code": q.get("quiz_code",""),
+            "quiz_answer": q.get("answer")
+         })
+
+      # 원래 저장한 순서대로 정렬(옵션)
+      order = {qid: i for i, qid in enumerate(user.get("bookmarks", []))}
+      bookmarks.sort(key=lambda x: order.get(x["_id"], 1e9))
+   # solved 배열 가져오기
+   solved = user.get("solved", [])
+   total_solved = len(solved)
+   correct_count = sum(1 for s in solved if s.get("correct"))
+
+   return render_template('mypage.html', username=user.get("user_name", user_id), rank=user.get("user_rank", 0), bookmarks=bookmarks, correct_count=correct_count, total_solved=total_solved,)
 
 @app.route('/signup')
 def signup_page():
@@ -67,8 +93,14 @@ def signup_page():
 def after_login():
    token = request.cookies.get('access_token')
    payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+   user_id = payload['sub']
    user_name = payload['name']
-   return render_template('afterLoginPage.html', username=user_name)
+
+   u = db.users.find_one({"user_id": user_id}) or {}
+   tl = u.get("today_limit", {})
+   can_play = not (tl.get("reached") and tl.get("date") == today_kst())
+
+   return render_template('afterLoginPage.html', username=user_name, can_play=can_play)
 
 
 @app.route('/quizpage', methods=['POST'])
@@ -76,6 +108,18 @@ def after_login():
 def quiz_page():
     category = request.form.get("category", "js")
     grade = request.form.get("grade", "하")
+    # 사용자 정보
+    token = request.cookies.get('access_token')
+    payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+    user_id = payload['sub']
+    user = db.users.find_one({"user_id": user_id})
+
+    # 오늘 제한 체크
+    u = db.users.find_one({"user_id": user_id}, {"today_limit": 1}) or {}
+    tl = u.get("today_limit", {})
+    if tl.get("reached") and tl.get("date") == today_kst():
+        # 메인으로 돌려보내거나 안내 페이지로
+        return redirect(url_for('after_login'))
 
     # 원하는 샘플링/선정 로직으로 고르면 됨. 여기선 간단히 필터+정렬 예시:
     docs = list(db.quiz.find(
@@ -85,12 +129,6 @@ def quiz_page():
     for d in docs:
         d["_id"] = str(d["_id"])
         d["blanks"] = extract_blanks(d.get("quiz_code", ""))
-
-    # 사용자 정보
-    token = request.cookies.get('access_token')
-    payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-    user_id = payload['sub']
-    user = db.users.find_one({"user_id": user_id})
 
     return render_template("quizPage.html", quizzes=docs, category=category, grade=grade, user=user)
 
@@ -112,6 +150,12 @@ def grading_page():
     token = request.cookies.get('access_token')
     payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
     user_id = payload['sub']
+
+    db.users.update_one(
+        {"user_id": user_id},
+        {"$set": {"today_limit": {"date": today_kst(), "reached": True}}},
+        upsert=True
+    )
     
     quiz_ids = [qid for qid in request.form.getlist("quiz_ids[]") if qid]
     if not quiz_ids:
@@ -252,23 +296,29 @@ def addquiz():
    input_quiz_code = request.form['quiz_code']
    input_answer = request.form['answer']
    input_quiz_num = db.quiz.count_documents({}) + 1
+   token = request.cookies.get('access_token')
+   payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+   user_name = payload['name']
+
+   last_quiz = db.quiz.find_one(sort=[("quiz_num", -1)])
+   if last_quiz:
+      new_quiz_num = last_quiz['quiz_num'] + 1
+   else:
+      new_quiz_num = 1
 
    quiz = {
-       'quiz_num': input_quiz_num,
+       'quiz_num': new_quiz_num,
        'category': input_category,
        'quiz_grade': input_quiz_grade,
        'quiz_sentence': input_quiz_sentence,
        'quiz_code': input_quiz_code,
        'answer': input_answer,
        'complaint': 0,
-       'writer': "writer"
+       'writer': user_name
    }
    db.quiz.insert_one(quiz)
 
-   token = request.cookies.get('access_token')
-   payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-   user_name = payload['name']
-   return render_template('addQuizPage.html', username=user_name)
+   return jsonify({'result': 'success'})
 
 @app.route('/quiz/complaint/<id>', methods=['POST'])
 @token_required

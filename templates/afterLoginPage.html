@@ -1,166 +1,149 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>오늘의 퀴즈</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap");
 
-      body {
-        font-family: "Noto Sans KR", sans-serif;
-        background-color: #f8f5f2;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>오늘의 퀴즈</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap");
 
-      /* 선택된 버튼 스타일 */
-      .btn-quiz.active {
-        background-color: #a57a62;
-        color: white;
-      }
-    </style>
-  </head>
+    body {
+      font-family: "Noto Sans KR", sans-serif;
+      background-color: #f8f5f2;
+    }
 
-  <body
-    class="bg-[#f8f5f2] text-gray-800 min-h-screen flex flex-col items-center"
-  >
-    <header
-      class="w-full bg-white shadow-md p-4 flex justify-center sticky top-0 z-51"
-    >
-      <div class="flex items-center justify-between w-full max-w-[1000px]">
-        <h1 class="text-4xl font-extrabold text-[#a57a62]">오늘의 퀴즈</h1>
-        <div
-          class="flex items-center space-x-4 text-gray-500 font-semibold text-lg"
-        >
-          <button id="logout-button" class="hover:underline transition-colors">
-            로그아웃
-          </button>
-          <button
-            id="username-button"
-            class="hover:underline transition-colors"
-          >
-            {{ username }}
-          </button>
-        </div>
+    /* 선택된 버튼 스타일 */
+    .btn-quiz.active {
+      background-color: #a57a62;
+      color: white;
+    }
+  </style>
+</head>
+
+<body class="bg-[#f8f5f2] text-gray-800 min-h-screen flex flex-col items-center">
+  <header class="w-full bg-white shadow-md p-4 flex justify-center sticky top-0 z-51">
+    <div class="flex items-center justify-between w-full max-w-[1000px]">
+      <h1 class="text-4xl font-extrabold text-[#a57a62]">오늘의 퀴즈</h1>
+      <div class="flex items-center space-x-4 text-gray-500 font-semibold text-lg">
+        <button id="logout-button" class="hover:underline transition-colors">
+          로그아웃
+        </button>
+        <button id="username-button" class="hover:underline transition-colors">
+          {{ username }}
+        </button>
       </div>
-    </header>
-
-    <main class="flex-grow flex items-start justify-center p-6 w-full">
-      <div
-        class="bg-white rounded-2xl shadow-xl p-12 max-w-2xl w-full text-center border border-gray-200"
-      >
-        <div class="pb-16">
-          <p id="quiz-date" class="text-4xl font-bold text-[#a57a62]"></p>
-        </div>
-
-        <form method="post" action="/quizpage" class="space-y-4">
-          <div>
-            <label class="block text-sm mb-1">카테고리</label>
-            <select
-              name="category"
-              required
-              class="w-full border border-stone-300 rounded-md px-3 py-2"
-            >
-              <option value="js">JS</option>
-              <option value="py">Python</option>
-              <option value="c">C언어</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm mb-1">난이도</label>
-            <select
-              name="grade"
-              class="w-full border border-stone-300 rounded-md px-3 py-2"
-            >
-              <option value="하">하</option>
-              <option value="중">중</option>
-              <option value="상">상</option>
-            </select>
-          </div>
-          <br /><br />
-          <button
-            id="quizpage-button"
-            class="w-60 bg-[#a57a62] text-white text-xl font-bold py-4 rounded-lg shadow-lg hover:bg-[#8d6c54] transition-colors"
-          >
-            풀러가기
-          </button>
-        </form>
-      </div>
-    </main>
-
-    <div class="flex justify-end">
-      <button
-        id="addquizpage-button"
-        class="fixed bottom-8 right-4 w-16 h-16 bg-[#a57a62] text-white text-l font-bold rounded-full shadow-lg opacity-0 transform translate-y-4 transition-all"
-      >
-        문제추가
-      </button>
-      <button
-        id="plus-button"
-        class="fixed bottom-4 right-4 w-16 h-16 bg-[#a57a62] text-white text-2xl font-bold rounded-full shadow-lg hover:bg-[#8d6c54] transition-colors"
-      >
-        +
-      </button>
     </div>
+  </header>
 
-    <script>
-      document.getElementById("logout-button").addEventListener("click", () => {
-        fetch("/logout", { method: "POST" })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("로그아웃 완료:", data);
-            window.location.href = "/";
-          });
+  <main class="flex-grow flex items-start justify-center p-6 w-full">
+    <div class="bg-white rounded-2xl shadow-xl p-12 max-w-2xl w-full text-center border border-gray-200">
+      <div class="pb-16">
+        <p id="quiz-date" class="text-4xl font-bold text-[#a57a62]"></p>
+      </div>
+
+      <form method="post" action="/quizpage" class="space-y-4">
+        <div>
+          <label class="block text-sm mb-1">카테고리</label>
+          <select name="category" required class="w-full border border-stone-300 rounded-md px-3 py-2">
+            <option value="js">JS</option>
+            <option value="py">Python</option>
+            <option value="c">C언어</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm mb-1">난이도</label>
+          <select name="grade" class="w-full border border-stone-300 rounded-md px-3 py-2">
+            <option value="하">하</option>
+            <option value="중">중</option>
+            <option value="상">상</option>
+          </select>
+        </div>
+        <br /><br />
+        <button id="quizpage-button"
+          class="w-80 text-white text-xl font-bold py-4 rounded-lg shadow-lg transition-colors
+                   {% if can_play %} bg-[#a57a62] hover:bg-[#8d6c54] {% else %} bg-gray-400 cursor-not-allowed pointer-events-none {% endif %}" {% if not
+          can_play %} disabled {% endif %}>
+          {% if can_play %} 풀러가기 {% else %} 오늘의 문제를 다 푸셨습니다. {% endif %}
+        </button>
+        {% if not can_play %}
+        <p class="mt-2 text-sm text-stone-500">내일 오전 12시(한국시간) 이후 다시 도전해 주세요.</p>
+        {% endif %}
+      </form>
+    </div>
+  </main>
+
+  <div class="flex justify-end">
+    <button id="addquizpage-button"
+      class="fixed bottom-8 right-4 w-16 h-16 bg-[#a57a62] text-white text-l font-bold rounded-full shadow-lg opacity-0 transform translate-y-4 transition-all">
+      문제추가
+    </button>
+    <button id="plus-button"
+      class="fixed bottom-4 right-4 w-16 h-16 bg-[#a57a62] text-white text-2xl font-bold rounded-full shadow-lg hover:bg-[#8d6c54] transition-colors">
+      +
+    </button>
+  </div>
+
+  <script>
+    document.getElementById("logout-button").addEventListener("click", () => {
+      fetch("/logout", { method: "POST" })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("로그아웃 완료:", data);
+          window.location.href = "/";
+        });
+    });
+
+    document
+      .getElementById("addquizpage-button")
+      .addEventListener("click", () => {
+        console.log("문제만들기 페이지로 이동합니다.");
+        window.location.href = "addquizpage";
       });
 
-      document
-        .getElementById("addquizpage-button")
-        .addEventListener("click", () => {
-          console.log("문제만들기 페이지로 이동합니다.");
-          window.location.href = "addquizpage";
-        });
-
-      document
-        .getElementById("username-button")
-        .addEventListener("click", () => {
-          console.log("마이페이지로 이동합니다.");
-          window.location.href = "mypage";
-        });
-
-      //+버튼
-      const plusbtn = document.getElementById("plus-button");
-      const addquizpagebtn = document.getElementById("addquizpage-button");
-      let open = false;
-      plusbtn.addEventListener("click", () => {
-        open = !open;
-
-        if (open) {
-          addquizpagebtn.style.opacity = "1";
-          addquizpagebtn.style.transform = "translateY(-60px)";
-        } else {
-          addquizpagebtn.style.opacity = "0";
-          addquizpagebtn.style.transform = "translateY(0)";
-        }
+    document
+      .getElementById("username-button")
+      .addEventListener("click", () => {
+        console.log("마이페이지로 이동합니다.");
+        window.location.href = "mypage";
       });
 
-      // 날짜 자동 표시
-      const today = new Date();
-      const month = today.getMonth() + 1;
-      const day = today.getDate();
-      document.getElementById("quiz-date").innerText = `${month}/${day}의 퀴즈`;
+    //+버튼
+    const plusbtn = document.getElementById("plus-button");
+    const addquizpagebtn = document.getElementById("addquizpage-button");
+    let open = false;
+    plusbtn.addEventListener("click", () => {
+      open = !open;
 
-      // 카테고리/난이도 버튼 선택 기능
-      document.querySelectorAll(".btn-quiz").forEach((button) => {
-        button.addEventListener("click", () => {
-          // 같은 그룹의 다른 버튼의 'active' 클래스 제거
-          const parentDiv = button.closest("div");
-          parentDiv.querySelectorAll(".btn-quiz").forEach((btn) => {
-            btn.classList.remove("active");
-          });
-          // 클릭된 버튼에 'active' 클래스 추가
-          button.classList.add("active");
+      if (open) {
+        addquizpagebtn.style.opacity = "1";
+        addquizpagebtn.style.transform = "translateY(-60px)";
+      } else {
+        addquizpagebtn.style.opacity = "0";
+        addquizpagebtn.style.transform = "translateY(0)";
+      }
+    });
+
+    // 날짜 자동 표시
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    document.getElementById("quiz-date").innerText = `${month}/${day}의 퀴즈`;
+
+    // 카테고리/난이도 버튼 선택 기능
+    document.querySelectorAll(".btn-quiz").forEach((button) => {
+      button.addEventListener("click", () => {
+        // 같은 그룹의 다른 버튼의 'active' 클래스 제거
+        const parentDiv = button.closest("div");
+        parentDiv.querySelectorAll(".btn-quiz").forEach((btn) => {
+          btn.classList.remove("active");
         });
+        // 클릭된 버튼에 'active' 클래스 추가
+        button.classList.add("active");
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
+
 </html>
