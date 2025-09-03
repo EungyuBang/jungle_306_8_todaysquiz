@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -11,22 +11,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
     integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
   
-    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}" /> -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}" />
     <link rel="stylesheet" href=/static/style.css>
-    <!-- <script src="{{ url_for('static', filename='script.js' )}}"></script> -->
+    <script src="{{ url_for('static', filename='script.js' )}}"></script>
     <script src=static/script.js text="main.js"></script>
     <title>오늘의 퀴즈 - 퀴즈풀기</title>
   </head>
   <body>
     <header>
-
         <h1>오늘의 퀴즈</h1>
         <ul class="menu">
             <li><a href="mypage">username</a></li>
             <li>로그아웃</li>
         </ul>
-
     </header>
 
     <div class="quiz-box">
@@ -47,8 +46,91 @@
       </div>
 
       <div class="main-btn">
-        <button class="next" onclick="location.href='grading'">제출하기</button>
+        <button id="submit-btn" class="bg-[#A57A62] border-[#A57A62] w-[160px] h-[40px] text-[16px] mx-auto text-white rounded-lg shadow-lg hover:opacity-90 focus:outline-[2px] focus:outline-[#7A5845] focus:outline-solid transition-all">제출하기</button>
       </div>
+
+      <script>
+        document.getElementById('#submit-btn').addEventListener('click', () => {
+          window.location.href='grading'
+        })
+      </script>
     </div>
   </body>
+</html> -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>오늘의 퀴즈</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{{ url_for('static', filename='script.js' )}}"></script>
+  <!-- <script src=static/script.js text="main.js"></script> -->
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { theme: { extend: { colors: { main: '#a57a62' }}}}</script>
+</head>
+<body class="bg-white text-stone-800">
+  <header class="max-w-3xl mx-auto px-4 py-5">
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-extrabold text-main">오늘의 퀴즈</h1>
+      <a href="/" class="text-main/80 hover:underline text-sm">처음으로</a>
+    </div>
+    <p class="px-1 text-stone-500 text-sm">카테고리: {{ category }} / 난이도: {{ level }}</p>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 pb-16">
+    <form action="/grading" method="post" class="space-y-10">
+      {% for q in quizzes %}
+      <section class="space-y-3">
+        <div class="flex items-center justify-between quiz-card" data-id="{{ q.qid }}">
+          <h2 class="font-semibold">
+            {{ loop.index }}. {{ q.quiz_sentence or "빈 칸에 알맞은 단어를 입력하세요." }}
+          </h2>
+          <div class="flex items-center gap-2">
+            <button type="button"
+              class="inline-flex items-center gap-1 rounded-md border border-main/50 text-main px-3 py-1.5 text-sm hover:bg-main/5">
+              <!-- 북마크 -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M5 3a2 2 0 0 0-2 2v12l7-3 7 3V5a2 2 0 0 0-2-2H5z"/>
+              </svg>
+              북마크
+            </button>
+            <button type="button"
+              class="inline-flex items-center gap-1 rounded-md border border-main/50 text-main px-3 py-1.5 text-sm hover:bg-main/5" onclick="complaint(this)">
+              <!-- 신고 -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm0 5a1.25 1.25 0 1 1-1.25 1.25A1.25 1.25 0 0 1 10 5.5Zm1.5 9h-3v-1.5h1.125V9.5H8.5V8h3v5h1v1.5Z"/>
+              </svg>
+              신고하기
+            </button>
+          </div>
+        </div>
+
+        <pre class="bg-stone-200 rounded-md w-full h-48 p-4 overflow-auto text-sm leading-6 text-stone-800">
+<code>{{ q.quiz_code }}</code>
+        </pre>
+
+        <input type="hidden" name="quiz_ids[]" value="{{ q.qid }}" />
+
+        <div class="space-y-3">
+          {% for b in q.blanks %}
+            <input name="answer-{{ q.qid }}-{{ loop.index }}"
+                   placeholder="정답을 입력하세요."
+                   required
+                   class="w-full bg-transparent outline-none placeholder-stone-400
+                          border-0 border-b-2 border-main/40 focus:border-main py-2" />
+          {% endfor %}
+        </div>
+      </section>
+      {% endfor %}
+
+      <div class="pt-2">
+        <button type="submit"
+          class="mx-auto block w-40 rounded-md bg-main text-white py-3 font-semibold hover:brightness-95">
+          제출하기
+        </button>
+      </div>
+    </form>
+  </main>
+</body>
 </html>
