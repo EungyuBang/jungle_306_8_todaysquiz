@@ -1,45 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-    href="https://fonts.googleapis.com/css2?family=Gothic+A1&family=Manufacturing+Consent&family=Nanum+Myeongjo&family=Nanum+Pen+Script&display=swap"
-    rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  
-    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}" /> -->
-    <link rel="stylesheet" href=/static/style.css>
-    <!-- <script src="{{ url_for('static', filename='script.js' )}}"></script> -->
-    <script src=static/script.js text="main.js"></script>
-  </head>
 
-  <body>
-    <div class="main-header">
-      <p class="page-title">오늘의 퀴즈</p>
-      <button class="btn login-button" onclick="location.href='loginpage'">
-        로그인
-      </button>
-    </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- <script src="{{ url_for('static', filename='script.js' )}}"></script> -->
+  <script src=static/script.js text="main.js"></script>
+</head>
 
-    <div class="middle-text">
-      <p class="middle-text1">매일 3문제로</p>
-      <p class="middle-text2">
-        심심할 땐 한 문제, 오늘의 퀴즈로 머리를 윔업해보세요
-      </p>
-    </div>
+<body>
+    <header class="flex w-full max-w-[1000px] mx-auto py-[10px] text-[#a57a62] bg-white items-center px-4 rounded-b-lg shadow-md">
+        <h1 class="text-[40px] font-[1000]">오늘의 퀴즈</h1>
+        <button id="login-btn" class="ml-auto text-[#a57a62] font-semibold py-2 px-4 rounded-lg border-2 border-[#a57a62] hover:bg-[#f5f5f5]">
+            로그인
+        </button>
+    </header>
 
-    <div class="start">
-      <button
-        class="btn btn-primary start-button"
-        onclick="location.href='loginpage'"
-      >
-        시작하기
-      </button>
-    </div>
-  </body>
+    <main class="text-center">
+        <div class="pt-[100px] text-[45px] font-bold">
+            <p>매일 3문제로</p>
+        </div>
+        <div class="text-[20px]">
+            <p>
+                심심할 땐 한 문제, 오늘의 퀴즈로 머리를 윔업해보세요
+            </p>
+        </div>
+
+        <div class="pt-[100px] w-full">
+            <button id="start-btn" class="bg-[#a57a62] border-[#a57a62] w-[150px] h-[50px] text-[27px] mx-auto text-white rounded-lg shadow-lg hover:opacity-90 focus:outline-[2px] focus:outline-[#7a5845] focus:outline-solid transition-all">
+                시작하기
+            </button>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('login-btn').addEventListener('click', () => {
+            console.log('Login button clicked!');
+            window.location.href = 'loginpage';
+        });
+
+        document.getElementById('start-btn').addEventListener('click', () => {
+            console.log('Start button clicked!');
+
+            window.location.href = 'loginpage';
+        });
+    </script>
+</body>
+
 </html>
