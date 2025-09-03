@@ -112,6 +112,7 @@ def quiz_page():
     token = request.cookies.get('access_token')
     payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
     user_id = payload['sub']
+    username = payload['name']
     user = db.users.find_one({"user_id": user_id})
 
     # 오늘 제한 체크
@@ -139,16 +140,11 @@ def quiz_page():
     else:
       quizzes = worker_quiz + user_quiz
 
- 
-   #  docs = list(db.quiz.find(
-   #      {"category": category, "quiz_grade": grade}
-   #  ).sort("quiz_num", 1).limit(3))
-
     for quiz in quizzes:
         quiz["_id"] = str(quiz["_id"])
         quiz["blanks"] = extract_blanks(quiz.get("quiz_code", ""))
 
-    return render_template("quizPage.html", quizzes=quizzes, category=category, grade=grade, user=user)
+    return render_template("quizPage.html", quizzes=quizzes, category=category, grade=grade, user=user, username=username)
 
 
 @app.route('/addquizpage')
