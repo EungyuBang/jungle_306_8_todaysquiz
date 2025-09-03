@@ -120,17 +120,35 @@ def quiz_page():
     if tl.get("reached") and tl.get("date") == today_kst():
         # 메인으로 돌려보내거나 안내 페이지로
         return redirect(url_for('after_login'))
+    
+    base_match = {"category": category, "quiz_grade": grade}
+    worker_quiz = list(db.quiz.aggregate([
+         {"$match": {**base_match, "writer": "worker"}},
+         {"$sample": {"size": 2}}
+    ]))
+    user_quiz = list(db.quiz.aggregate([
+        {"$match": {**base_match, "writer": {"$ne": "worker"}}},
+        {"$sample": {"size": 1}}
+    ]))
 
-    # 원하는 샘플링/선정 로직으로 고르면 됨. 여기선 간단히 필터+정렬 예시:
-    docs = list(db.quiz.find(
-        {"category": category, "quiz_grade": grade}
-    ).sort("quiz_num", 1).limit(3))
+    if len(user_quiz) == 0:
+      quizzes = list(db.quiz.aggregate([
+          {"$match": {**base_match, "writer": "worker"}},
+          {"$sample": {"size": 3}}
+      ]))
+    else:
+      quizzes = worker_quiz + user_quiz
 
-    for d in docs:
-        d["_id"] = str(d["_id"])
-        d["blanks"] = extract_blanks(d.get("quiz_code", ""))
+ 
+   #  docs = list(db.quiz.find(
+   #      {"category": category, "quiz_grade": grade}
+   #  ).sort("quiz_num", 1).limit(3))
 
-    return render_template("quizPage.html", quizzes=docs, category=category, grade=grade, user=user)
+    for quiz in quizzes:
+        quiz["_id"] = str(quiz["_id"])
+        quiz["blanks"] = extract_blanks(quiz.get("quiz_code", ""))
+
+    return render_template("quizPage.html", quizzes=quizzes, category=category, grade=grade, user=user)
 
 
 @app.route('/addquizpage')
@@ -356,8 +374,8 @@ def next_quiz():
     q = db.quiz.find({
         "_id": {"$nin": exclude_list},
         "quiz_num": {"$gt": start_num},
-        "category": category,           # ✅ 필터 적용
-        "quiz_grade": grade             # ✅ 필터 적용
+        "category": category,
+        "quiz_grade": grade
     }).sort("quiz_num", 1).limit(1)
 
     q = list(q)
@@ -372,7 +390,7 @@ def next_quiz():
 @app.route('/managepage')
 @token_required
 def manage_page():
-    docs = list(db.quiz.find({"complaint": {"$gte": 1}}).sort("complaint", -1))
+    docs = list(db.quiz.find({"complaint": {"$gte": 3}}).sort("complaint", -1))
     for d in docs:
         d["_id"] = str(d["_id"])
     return render_template("managePage.html", quizzes=docs)

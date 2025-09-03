@@ -30,7 +30,9 @@
       <section class="space-y-3">
         <div class="flex items-center justify-between quiz-card" data-id="{{ q._id }}">
           <h2 class="font-semibold">
-            {{ loop.index }}. {{ q.quiz_sentence or "빈 칸에 알맞은 단어를 입력하세요." }}
+            {{ loop.index }}. {{ q.quiz_sentence or "빈 칸에 알맞은 단어를 입력하세요." }} {% if q.writer != "worker" %}
+            <span class="text-sm text-stone-500">/ 출제자: {{ q.writer }}</span>
+          {% endif %}
           </h2>
           <div class="flex items-center gap-2">
             <button type="button"
