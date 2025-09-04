@@ -1,0 +1,80 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}오늘의 퀴즈{% endblock %}</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            main: "#a57a62",
+            ink: "#1f2937",       // 텍스트 기본
+            stone: { 50:"#fafaf9",100:"#f5f5f4",200:"#e7e5e4",300:"#d6d3d1" }
+          },
+          boxShadow: {
+            card: "0 8px 24px rgba(0,0,0,0.08)"
+          },
+          borderRadius: {
+            xl2: "1rem"
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font & Base BG -->
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap");
+    :root { color-scheme: light; }
+    body { font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  </style>
+
+  {% block head %}{% endblock %}
+</head>
+<body class="min-h-screen bg-stone-50 text-ink flex flex-col">
+
+  {# 공통 헤더 (로그인/로그아웃) - 로그인/회원가입 페이지는 hide_header=True 로 숨김 #}
+  {% if not hide_header %}
+  <header class="w-full bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl md:text-3xl font-extrabold text-main">
+        <a href="{{ '/' if is_index else '/afterlogin' }}">오늘의 퀴즈</a>
+      </h1>
+
+      <div class="flex items-center gap-4 text-gray-600 font-semibold">
+        {% if username %}
+          <button id="logout-button" class="hover:underline">로그아웃</button>
+          <a href="/mypage" class="hover:underline">{{ username }}</a>
+        {% else %}
+          <a href="/loginpage" class="hover:underline">로그인</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+  {% endif %}
+
+  <main class="flex-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block scripts %}
+  <script>
+    // 로그아웃만 JS로 POST
+    const lb = document.getElementById('logout-button');
+    if (lb) {
+      lb.addEventListener('click', () => {
+        fetch('/logout', { method: 'POST' })
+          .then(r => r.json())
+          .then(() => location.href = '/');
+      });
+    }
+  </script>
+  {% endblock %}
+</body>
+</html>

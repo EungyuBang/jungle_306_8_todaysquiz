@@ -8,6 +8,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="static/script.js" text="main.js"></script>
   <title>오늘의 퀴즈 - 로그인</title>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { main: "#A57A62" } } } };
+  </script>
 </head>
 
 <body class="flex flex-col items-center justify-center min-h-screen bg-white">
@@ -20,36 +23,38 @@
   <div class="w-[500px] max-w-full p-8 border-2 border-[#a57a62] rounded-xl bg-white shadow-xl text-center">
     <h2 class="text-3xl text-[#a57a62] font-semibold mb-6">로그인</h2>
 
-    <!-- ID 입력 -->
-    <div class="relative mb-6">
-      <label for="id-input" class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm">
-        ID
-      </label>
-      <input id="id-input" type="text" placeholder="아이디"
-        class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400" />
-    </div>
+    <!-- 엔터키 submit을 위한 폼캐그 -->
+    <form id="login-form" onsubmit="login(); return false;">
+      <div class="relative mb-6">
+        <label for="id-input" class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm">
+          ID
+        </label>
+        <input id="id-input" type="text" placeholder="아이디"
+          class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400"
+          required />
+      </div>
 
-    <!-- PW 입력 -->
-    <div class="relative mb-8">
-      <label for="pw-input" class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm">
-        PASSWORD
-      </label>
-      <input id="pw-input" type="password" placeholder="비밀번호"
-        class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400" />
-    </div>
+      <div class="relative mb-8">
+        <label for="pw-input" class="absolute -top-2 left-3 bg-white px-1 text-[#a57a62] text-sm">
+          PASSWORD
+        </label>
+        <input id="pw-input" type="password" placeholder="비밀번호"
+          class="w-full px-4 py-3 border-2 border-[#a57a62] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a57a62] placeholder-gray-400"
+          required />
+      </div>
 
-    <!-- 버튼 -->
-    <div class="flex justify-center space-x-4">
-      <button id="login-button"
-        class="bg-[#a57a62] text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:opacity-90 transition"
-        onclick="login()">
-        로그인
-      </button>
-      <button id="register-button"
-        class="bg-gray-200 text-[#a57a62] font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-gray-300 transition">
-        회원가입
-      </button>
-    </div>
+      <!-- 버튼 -->
+      <div class="flex justify-center space-x-4">
+        <button type="submit"
+          class="bg-[#a57a62] text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:opacity-90 transition">
+          로그인
+        </button>
+        <button type="button" id="register-button"
+          class="bg-gray-200 text-[#a57a62] font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-gray-300 transition">
+          회원가입
+        </button>
+      </div>
+    </form>
   </div>
 
   <script>

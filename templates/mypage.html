@@ -9,21 +9,28 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <title>오늘의 퀴즈 - 마이페이지</title>
 </head>
+<script>
+  tailwind.config = { theme: { extend: { colors: { main: "#A57A62" } } } };
+</script>
 
 <body class="bg-gray-100 font-sans">
-  <div class="flex justify-between items-center py-4 px-6 bg-white shadow-md text-[#a57a62]">
-    <button class="text-xl font-bold hover:text-gray-700 transition-colors" onclick="location.href='afterlogin'">
-      오늘의퀴즈
-    </button>
-    <div class="flex items-center space-x-4 text-gray-500 font-semibold text-lg">
-      <button id="logout-button" class="hover:underline transition-colors">
-        로그아웃
-      </button>
-      <button id="username-button" class="hover:underline transition-colors">
-        {{username}}
-      </button>
+  
+  <header class="w-full bg-white shadow-md p-4 flex justify-center sticky top-0 z-51">
+    <div class="flex items-center justify-between w-full max-w-[1000px]">
+      <h1><a href="/afterlogin"
+        class="text-4xl font-extrabold text-[#a57a62] hover:text-[#8d6c54] transition-colors">
+        오늘의 퀴즈
+      </a></h1>
+      <div class="flex items-center space-x-4 text-gray-500 font-semibold text-lg">
+        <button id="logout-button" class="hover:underline transition-colors">
+          로그아웃
+        </button>
+        <button id="username-button" class="hover:underline transition-colors">
+          {{ username }}
+        </button>
+      </div>
     </div>
-  </div>
+  </header>
 
   <div class="container mx-auto mt-8 p-6 bg-white rounded-lg shadow-md text-center">
     <p class="text-2xl font-semibold mb-2"><span class="text-[#a57a62] font-bold">{{username}}</span>님 안녕하세요.</p>
@@ -100,13 +107,6 @@
       btn.addEventListener("click", () => {
         const panel = btn.parentElement.querySelector("div");
         panel.classList.toggle("hidden");
-        // if(arrowState == false) {
-        //   arrowState = true;
-        //   arrow.innerText = '🔺';
-        // } else {
-        //   arrowState = false;
-        //   arrow.innerText = '🔻';
-        // }
       });
     });
   </script>

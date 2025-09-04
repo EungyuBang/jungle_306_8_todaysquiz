@@ -14,15 +14,27 @@
 </head>
 
 <body class="bg-white text-stone-800">
-  <header class="max-w-3xl mx-auto px-4 py-5">
-    <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-extrabold text-main">오늘의 퀴즈</h1>
-      <a href="/afterlogin" class="text-main/80 hover:underline text-sm">처음으로</a>
+  <header class="w-full bg-white shadow-md p-4 flex justify-center sticky top-0 z-51">
+    <div class="flex items-center justify-between w-full max-w-[1000px]">
+      <h1 class="text-4xl font-extrabold text-[#a57a62]">오늘의 퀴즈</h1>
+      <div class="flex items-center space-x-4 text-gray-500 font-semibold text-lg">
+        <button id="logout-button" class="hover:underline transition-colors">
+          로그아웃
+        </button>
+        <button id="username-button" class="hover:underline transition-colors">
+          {{ username }}
+        </button>
+      </div>
     </div>
-    <p class="px-1 text-stone-500 text-sm">
-      카테고리: {{ category }} / 난이도: {{ grade }}
-    </p>
   </header>
+  <div class="max-w-3xl mx-auto px-4 py-5">
+    <div class="flex items-center justify-between">
+      <h1 class="text-xl font-extrabold text-main">카테고리: {{ category }} / 난이도: {{ grade }}</h1>
+    </div>
+    <!-- <p class="px-1 text-stone-500 text-sm">
+      카테고리: {{ category }} / 난이도: {{ grade }}
+    </p> -->
+  </div>
   <main class="max-w-3xl mx-auto px-4 pb-16">
     <form action="/grading" method="post" class="space-y-10" id="quiz-form" data-category="{{ category }}"
       data-grade="{{ grade }}">
@@ -67,6 +79,17 @@
       </div>
     </form>
   </main>
+  <script>
+    document.getElementById("logout-button").addEventListener("click", () => {
+      fetch("/logout", { method: "POST" })
+        .then((res) => res.json())
+        .then(() => { window.location.href = "/"; });
+    });
+  
+    document.getElementById("username-button").addEventListener("click", () => {
+      window.location.href = "/mypage";
+    });
+  </script>
 </body>
 
 </html>

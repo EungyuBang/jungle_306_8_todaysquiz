@@ -164,6 +164,7 @@ def grading_page():
     token = request.cookies.get('access_token')
     payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
     user_id = payload['sub']
+    username = payload['name']
 
     db.users.update_one(
         {"user_id": user_id},
@@ -244,13 +245,7 @@ def grading_page():
     
     # 업데이트된 사용자 정보를 다시 불러와 템플릿에 전달
     user = db.users.find_one({"user_id": user_id}, {"solved": 1, "_id": 0})
-    return render_template(
-        "gradingPage.html",
-        results=results,
-        score=score,
-        total=len(quiz_ids),
-        user=user
-    )
+    return render_template("gradingPage.html", results=results, score=score, total=len(quiz_ids), user=user, username=username)
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -386,10 +381,13 @@ def next_quiz():
 @app.route('/managepage')
 @token_required
 def manage_page():
+    token = request.cookies.get('access_token')
+    payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+    username = payload['name']
     docs = list(db.quiz.find({"complaint": {"$gte": 3}}).sort("complaint", -1))
     for d in docs:
         d["_id"] = str(d["_id"])
-    return render_template("managePage.html", quizzes=docs)
+    return render_template("managePage.html", quizzes=docs, username=username)
 
 @app.route('/quiz/delete/<id>', methods=['POST'])
 @token_required

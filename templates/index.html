@@ -9,16 +9,19 @@
     <!-- <script src="{{ url_for('static', filename='script.js' )}}"></script> -->
     <script src=static/script.js text="main.js"></script>
     <title>오늘의 퀴즈</title>
+    <script>
+      tailwind.config = { theme: { extend: { colors: { main: "#A57A62" } } } };
+    </script>
 </head>
 
 <body>
-    <header
-        class="flex w-full max-w-[1000px] mx-auto py-[10px] text-[#a57a62] bg-white items-center px-4 rounded-b-lg shadow-md">
-        <h1 class="text-[40px] font-[1000]">오늘의 퀴즈</h1>
-        <button id="login-btn"
-            class="ml-auto text-[#a57a62] font-semibold py-2 px-4 rounded-lg border-2 border-[#a57a62] hover:bg-[#f5f5f5]">
+    <header class="w-full bg-white shadow-md p-4 flex justify-center sticky top-0 z-51">
+      <div class="flex items-center justify-between w-full max-w-[1000px]">
+        <h1 class="text-4xl font-extrabold text-[#a57a62]">오늘의 퀴즈</h1>
+        <button id="login-btn" class="hover:underline transition-colors">
             로그인
         </button>
+      </div>
     </header>
 
     <main class="text-center">

@@ -8,31 +8,25 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="static/script.js" text="main.js"></script>
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap");
-
-    body {
-      font-family: "Noto Sans KR", sans-serif;
-      background-color: #f8f5f2;
-    }
-
-    .btn-quiz.active {
-      background-color: #a57a62;
-      color: white;
-    }
-  </style>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { main: "#A57A62" } } } };
+  </script>
 </head>
 
 <body class="bg-[#f8f5f2] text-gray-800 min-h-screen flex flex-col items-center">
-  <header class="w-full bg-white shadow-md p-4 flex justify-center sticky top-0 z-50">
+  
+  <header class="w-full bg-white shadow-md p-4 flex justify-center sticky top-0 z-51">
     <div class="flex items-center justify-between w-full max-w-[1000px]">
-      <h1 class="text-4xl font-extrabold text-[#a57a62]">오늘의 퀴즈</h1>
+      <h1><a href="/afterlogin"
+        class="text-4xl font-extrabold text-[#a57a62] hover:text-[#8d6c54] transition-colors">
+        오늘의 퀴즈
+      </a></h1>
       <div class="flex items-center space-x-4 text-gray-500 font-semibold text-lg">
         <button id="logout-button" class="hover:underline transition-colors">
           로그아웃
         </button>
         <button id="username-button" class="hover:underline transition-colors">
-          {username}
+          {{ username }}
         </button>
       </div>
     </div>
@@ -110,6 +104,16 @@
   </main>
 
   <script>
+    document.getElementById("logout-button").addEventListener("click", () => {
+      fetch("/logout", { method: "POST" })
+        .then((res) => res.json())
+        .then(() => { window.location.href = "/"; });
+    });
+
+    document.getElementById("username-button").addEventListener("click", () => {
+      window.location.href = "/mypage";
+    });
+    
     let selectedLang = null;
     let selectedLevel = null;
 
